@@ -1,0 +1,116 @@
+
+import json
+
+postman_collection = {
+    "info": {
+        "name": "Inventory Management API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Create User",
+            "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "url": {"raw": "http://localhost:5000/user", "host": ["http://localhost:5000"], "path": ["user"]},
+                "body": {
+                    "mode": "raw",
+                    "raw": json.dumps({
+                        "email": "test@example.com",
+                        "password": "password123",
+                        "role": "admin"
+                    })
+                }
+            }
+        },
+        {
+            "name": "Login / Auth Token",
+            "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "url": {"raw": "http://localhost:5000/auth", "host": ["http://localhost:5000"], "path": ["auth"]},
+                "body": {
+                    "mode": "raw",
+                    "raw": json.dumps({
+                        "email": "test@example.com",
+                        "password": "password123"
+                    })
+                }
+            }
+        },
+        {
+            "name": "Get All Users (Admin Only)",
+            "request": {
+                "method": "GET",
+                "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                "url": {"raw": "http://localhost:5000/users", "host": ["http://localhost:5000"], "path": ["users"]}
+            }
+        },
+        {
+            "name": "Create Company",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {"key": "Authorization", "value": "Bearer {{token}}"},
+                    {"key": "Content-Type", "value": "application/json"}
+                ],
+                "url": {"raw": "http://localhost:5000/company", "host": ["http://localhost:5000"], "path": ["company"]},
+                "body": {
+                    "mode": "raw",
+                    "raw": json.dumps({
+                        "company_name": "Acme Corp"
+                    })
+                }
+            }
+        },
+        {
+            "name": "Get Companies",
+            "request": {
+                "method": "GET",
+                "url": {"raw": "http://localhost:5000/companies", "host": ["http://localhost:5000"], "path": ["companies"]}
+            }
+        },
+        {
+            "name": "Create Product",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {"key": "Authorization", "value": "Bearer {{token}}"},
+                    {"key": "Content-Type", "value": "application/json"}
+                ],
+                "url": {"raw": "http://localhost:5000/product", "host": ["http://localhost:5000"], "path": ["product"]},
+                "body": {
+                    "mode": "raw",
+                    "raw": json.dumps({
+                        "company_id": "{{company_id}}",
+                        "company_name": "Acme Corp",
+                        "price": 199,
+                        "description": "Widget",
+                        "active": True
+                    })
+                }
+            }
+        },
+        {
+            "name": "Get All Products",
+            "request": {
+                "method": "GET",
+                "url": {"raw": "http://localhost:5000/products", "host": ["http://localhost:5000"], "path": ["products"]}
+            }
+        },
+        {
+            "name": "Delete Product",
+            "request": {
+                "method": "DELETE",
+                "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+                "url": {
+                    "raw": "http://localhost:5000/product/delete?id={{product_id}}",
+                    "host": ["http://localhost:5000"],
+                    "path": ["product", "delete"],
+                    "query": [{"key": "id", "value": "{{product_id}}"}]
+                }
+            }
+        }
+    ]
+}
+
