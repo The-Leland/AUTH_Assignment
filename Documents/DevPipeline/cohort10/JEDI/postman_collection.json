@@ -1,0 +1,283 @@
+
+
+
+{
+  "info": {
+    "name": "Jedi Academy Training API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Youngling (User)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/user",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"luke\",\n  \"email\": \"luke@jedi.galaxy\",\n  \"password\": \"force123\",\n  \"force_rank\": \"Youngling\",\n  \"midi_count\": 15000\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Youngling (Luke)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/user/auth",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"luke\",\n  \"password\": \"force123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Profile (Luke)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{luke_token}}" }],
+            "url": "{{base_url}}/user/profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Temples",
+      "item": [
+        {
+          "name": "Create Temple (Grand Master)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{gm_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/temple",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"temple_name\": \"Jedi Temple Coruscant\",\n  \"planet\": \"Coruscant\",\n  \"padawan_limit\": 20\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Temple by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{any_token}}" }],
+            "url": "{{base_url}}/temple/{{temple_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Masters & Padawans",
+      "item": [
+        {
+          "name": "Promote to Master (Council)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{council_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/master",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{luke_id}}\",\n  \"master_name\": \"Master Luke\",\n  \"specialization\": \"Lightsaber Combat\",\n  \"years_training\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Padawan under Luke (Master)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{luke_master_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/padawan",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"master_id\": \"{{luke_master_id}}\",\n  \"user_id\": \"{{other_user_id}}\",\n  \"species_id\": \"{{human_species_id}}\",\n  \"padawan_name\": \"Anakin Skywalker\",\n  \"age\": 12\n}"
+            }
+          }
+        },
+        {
+          "name": "Promote Padawan (Council) → Knight",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{council_token}}" }
+            ],
+            "url": "{{base_url}}/padawan/{{anakin_id}}/promote"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crystals & Lightsabers",
+      "item": [
+        {
+          "name": "Create Crystal (Master)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{luke_master_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/crystal",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"crystal_type\": \"Ilum\",\n  \"origin_planet\": \"Ilum\",\n  \"rarity_level\": \"Rare\",\n  \"force_amplify\": 1.5\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Crystals by Rarity",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{luke_master_token}}" }
+            ],
+            "url": "{{base_url}}/crystal/Rare"
+          }
+        },
+        {
+          "name": "Construct Lightsaber (Padawan user)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{anakin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/lightsaber",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"saber_name\": \"Skywalker Saber\",\n  \"hilt_material\": \"Beskar\",\n  \"blade_color\": \"Blue\",\n  \"crystal_id\": \"{{ilum_id}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "View Lightsabers by Owner",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{anakin_token}}" }
+            ],
+            "url": "{{base_url}}/lightsaber/owner/{{anakin_user_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Courses & Enrollment",
+      "item": [
+        {
+          "name": "Create Course (Master)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{luke_master_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instructor_id\": \"{{luke_master_id}}\",\n  \"course_name\": \"Lightsaber Combat Form I\",\n  \"difficulty\": \"Beginner\",\n  \"duration_weeks\": 4,\n  \"max_students\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Courses by Difficulty",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{luke_master_token}}" }],
+            "url": "{{base_url}}/course/difficulty/Beginner"
+          }
+        },
+        {
+          "name": "Enroll Padawan in Course",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{luke_master_token}}" }],
+            "url": "{{base_url}}/enrollment",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"padawan_id\": \"{{anakin_id}}\",\n  \"course_id\": \"{{course_id}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Unenroll Padawan from Course",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{luke_master_token}}" }],
+            "url": "{{base_url}}/enrollment/{{anakin_id}}/{{course_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cleanup / DELETE",
+      "item": [
+        {
+          "name": "Delete Course (Council)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{council_token}}" }],
+            "url": "{{base_url}}/course/{{course_id}}"
+          }
+        },
+        {
+          "name": "Delete Padawan (Council)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{council_token}}" }],
+            "url": "{{base_url}}/padawan/{{anakin_id}}"
+          }
+        },
+        {
+          "name": "Delete Master (Grand Master)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{gm_token}}" }],
+            "url": "{{base_url}}/master/{{luke_master_id}}"
+          }
+        },
+        {
+          "name": "Delete User (Grand Master)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{gm_token}}" }],
+            "url": "{{base_url}}/user/{{luke_id}}"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5000" },
+    { "key": "luke_token", "value": "" },
+    { "key": "lm_token", "value": "" },
+    { "key": "council_token", "value": "" },
+    { "key": "gm_token", "value": "" },
+    { "key": "luke_id", "value": "" },
+    { "key": "luke_master_id", "value": "" },
+    { "key": "other_user_id", "value": "" },
+    { "key": "anakin_id", "value": "" },
+    { "key": "course_id", "value": "" },
+    { "key": "temple_id", "value": "" },
+    { "key": "human_species_id", "value": "" },
+    { "key": "ilum_id", "value": "" },
+    { "key": "anakin_token", "value": "" }
+  ]
+}
