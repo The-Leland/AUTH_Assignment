@@ -2,11 +2,12 @@
 
 
 from flask import Flask
-from db import db
-from routes import user_routes, company_routes, product_routes  # etc.
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
+
+from db import db, create_tables
+from utils.blueprints import register_blueprints
 
 load_dotenv()
 
@@ -17,7 +18,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 bcrypt = Bcrypt(app)
 
-app.register_blueprint(user_routes.bp)
+create_tables(app)            
+register_blueprints(app)      
 
 if __name__ == '__main__':
     app.run(debug=True)

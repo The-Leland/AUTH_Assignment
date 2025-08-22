@@ -1,12 +1,18 @@
 
 
 
-from flask import jsonify
-from db import db
-from models.product_category_xref import ProductCategoryXref
+from utils.reflection import get_session, reflect_db
+
+Base, engine = reflect_db()
+ProductCategoryXref = Base.classes.product_category_xref
 
 def create_xref(data):
-    xref = ProductCategoryXref(product_id=data['product_id'], category_id=data['category_id'])
-    db.session.add(xref)
-    db.session.commit()
-    return jsonify({'message': 'xref created'})
+    session = get_session()
+    xref = ProductCategoryXref()
+    xref.product_id = data['product_id']
+    xref.category_id = data['category_id']
+    session.add(xref)
+    session.commit()
+    return {'message': 'xref created'}
+
+
